@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_todolist/models/todo_model.dart';
+import 'package:simple_todolist/provider/todos_provider.dart';
 import 'package:simple_todolist/utils/constants/theme.dart';
 
 class AddToDoDialogWidget extends StatefulWidget {
@@ -10,13 +13,20 @@ class AddToDoDialogWidget extends StatefulWidget {
 
 class _AddToDoDialogWidgetState extends State<AddToDoDialogWidget> {
   final _formKey = GlobalKey<FormState>();
-  String title = '';
-  String description = '';
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ToDosProvider>(context, listen: false);
     return AlertDialog(
       content: Form(
         key: _formKey,
@@ -65,7 +75,17 @@ class _AddToDoDialogWidgetState extends State<AddToDoDialogWidget> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // create task
+                    // create todo
+                    final todo = ToDoModel(
+                        createdTime: DateTime.now(),
+                        id: DateTime.now().toString(),
+                        title: titleController.text,
+                        description: descriptionController.text);
+
+                    provider.addTodo(todo);
+                    titleController.clear();
+                    descriptionController.clear();
+                    Navigator.of(context).pop(context);
                   }
                 },
                 style: const ButtonStyle(

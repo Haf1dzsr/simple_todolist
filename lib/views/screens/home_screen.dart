@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_todolist/provider/bottom_navbar_provider.dart';
 import 'package:simple_todolist/utils/constants/theme.dart';
 import 'package:simple_todolist/views/widgets/add_todo_dialog_widget.dart';
+import 'package:simple_todolist/views/widgets/compeleted_list_widget.dart';
 import 'package:simple_todolist/views/widgets/todo_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final tabs = [
       const ToDoListWidget(),
-      Container(),
+      const CompletedListWidget(),
     ];
     return Consumer<BottomNavBarProvider>(
       builder: (context, bottomNavBarProvider, _) => Scaffold(
