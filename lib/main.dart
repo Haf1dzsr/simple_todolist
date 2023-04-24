@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_todolist/firebase_options.dart';
+import 'package:simple_todolist/provider/bottom_navbar_provider.dart';
+import 'package:simple_todolist/provider/todos_provider.dart';
 import 'package:simple_todolist/views/screens/home_screen.dart';
 
 void main() async {
@@ -14,8 +17,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => BottomNavBarProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ToDosProvider(),
+        ),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomeScreen(),
+      ),
     );
   }
 }
