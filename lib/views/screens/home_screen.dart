@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_todolist/models/api/firebase_api.dart';
+import 'package:simple_todolist/models/todo_model.dart';
 import 'package:simple_todolist/provider/bottom_navbar_provider.dart';
+import 'package:simple_todolist/provider/todos_provider.dart';
 import 'package:simple_todolist/utils/constants/theme.dart';
 import 'package:simple_todolist/views/widgets/add_todo_dialog_widget.dart';
 import 'package:simple_todolist/views/widgets/compeleted_list_widget.dart';
@@ -47,7 +50,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: tabs[bottomNavBarProvider.currentIndex],
+        body: StreamBuilder<List<ToDoModel>>(
+          stream: FirebaseApi.readToDos(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              default:
+                if (snapshot.hasError) {
+                  return const Text('Something went Wrong');
+                } else {
+                  final provider = Provider.of<ToDosProvider>(context);
+                  final todos = snapshot.data;
+                  provider.setTodos(todos!);
+
+                  return tabs[bottomNavBarProvider.currentIndex];
+                }
+            }
+          },
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => showDialog(
             // barrierDismissible: false,

@@ -6,7 +6,7 @@ import 'package:simple_todolist/provider/bottom_navbar_provider.dart';
 import 'package:simple_todolist/provider/todos_provider.dart';
 import 'package:simple_todolist/views/screens/home_screen.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
